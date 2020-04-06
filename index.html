@@ -241,116 +241,6 @@
 
 
   
-    <article id="post-spring-boot" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/04/spring-boot/">spring-boot</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/04/spring-boot/" class="archive-article-date">
-  	<time datetime="2020-04-04T07:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="原理初探"><a href="#原理初探" class="headerlink" title="原理初探"></a>原理初探</h2><p>+++</p>
-<h3 id="自动配置"><a href="#自动配置" class="headerlink" title="自动配置"></a>自动配置</h3><p><strong>pom.xml</strong></p>
-<ul>
-<li><p>spring-boot-dependences 核心依赖在父工程中</p>
-</li>
-<li><p>我们在引入一些spring-boot依赖的时候 不需要制定版本 因为有这些版本仓库     </p>
-</li>
-</ul>
-<p><strong>启动器</strong></p>
-<ul>
-<li><pre><code class="xml">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
-            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
-            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
-        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
-<span class="comment"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">+ 启动器 说白了就是启动场景</span><br><span class="line"></span><br><span class="line">+ 比如spring-boot-start-web就是启动web服务相关的依赖</span><br><span class="line"></span><br><span class="line">+ springboot会把所有的场景转换成一个一个的启动器</span><br><span class="line"></span><br><span class="line">+ 如果我们要使用什么功能就只需要找到启动器就可以了</span><br><span class="line"></span><br><span class="line">**主程序**</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;java</span><br><span class="line">@SpringBootApplication &#x2F;&#x2F;标注这个类是一个springboot应用</span><br><span class="line">public class HelloApplication &#123;</span><br><span class="line">    &#x2F;&#x2F;将springboot应用启动</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(HelloApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span></code></pre>
-</li>
-<li><p>注解</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication	</span><br><span class="line">	@SpringBootConfiguration springboot的配置</span><br><span class="line">		@Configuration spring配置类</span><br><span class="line">		@Component 本身是一个spring的组件</span><br><span class="line">	@EnableAutoConfiguration 自动导入配置</span><br><span class="line">		@AutoConfigurationPackage 自动配置包</span><br><span class="line">			@Import(&#123;Registrar.class&#125;)</span><br><span class="line">		@Import(&#123;AutoConfigurationImportSelector.class&#125;) 导入选择器</span><br><span class="line">	&#x2F;&#x2F;获取所有的配置</span><br><span class="line">	List&lt;String&gt; configurations &#x3D; this.getCandidateConfigurations(annotationMetadata, attributes);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p><strong>获取候选的配置</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> List&lt;String&gt; <span class="title">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(<span class="keyword">this</span>.getSpringFactoriesLoaderFactoryClass(), <span class="keyword">this</span>.getBeanClassLoader());</span><br><span class="line">    Assert.notEmpty(configurations, <span class="string">"No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct."</span>);</span><br><span class="line">    <span class="keyword">return</span> configurations;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; getSpringFactoriesLoaderFactoryClass() &#123;</span><br><span class="line">    <span class="keyword">return</span> EnableAutoConfiguration<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>自动配置的核心文件 META-INF/spring.factories</strong></p>
-<p><img src="C:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200406154502231.png" alt="image-20200406154502231"></p>
-<p><strong>结论</strong>：</p>
-<p>springboot所有自动配置都是启动时扫描并加载。spring.factories所有的自动配置类都在这里面，但是不一定生效 要判断条件是否成立，只要导入了对应的start 就有相应的启动器了 有了启动器自动装配的才会生效</p>
-<ul>
-<li>springboot在启动的时候，从类路径下/META-INF/spring.factories获取指定配置</li>
-<li>将这些自动配置的类导入容器，自动配置就会生效，帮我们进行自动配置</li>
-<li>以前我们需要自动配置的东西，现在pringboot帮我们做了</li>
-<li>整合javaEE 解决方案和自动配置的东西都在spring-boot-autoconfigure-2.2.0.RELEASE.jar这个包下</li>
-<li>它会把所有需要导入的组件，以类名的方式返回，这些组件就会被添加到容器</li>
-<li>容器中也会存在非常多的xxxAutoConfiguration的文件（@Bean）就是这些类给容器中导入了这个场景需要的所有组件，并自动配置 @Configuration javaconfig</li>
-<li>有了自动类，避免了我们手动配置编写配置文件的工作</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术分享</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/04/spring-boot/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-aop" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1280,6 +1170,100 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/03/22/activiti/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-git" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/06/git/">git</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/06/git/" class="archive-article-date">
+  	<time datetime="2019-04-06T09:21:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="git使用教程"><a href="#git使用教程" class="headerlink" title="git使用教程"></a>git使用教程</h2><p>+++</p>
+<h3 id="安装ssh"><a href="#安装ssh" class="headerlink" title="安装ssh"></a>安装ssh</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 生产公匙 过程中不要输入密码 直接回车</span></span></span><br><span class="line">ssh-keygen -t rsa </span><br><span class="line">把公匙拷贝到github上的setinng下的SSHandGPGKEYs</span><br></pre></td></tr></table></figure>
+
+<h3 id="项目git初始化方式"><a href="#项目git初始化方式" class="headerlink" title="项目git初始化方式"></a>项目git初始化方式</h3><ul>
+<li>方式一: 克隆项目</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone （ssh或者https https需要验证 ssh需要上一步配置）</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>方式二： </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line"></span><br><span class="line">git remote add origin git@github.com:congtong/equipment.git</span><br></pre></td></tr></table></figure>
+
+<p>可以执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -al ./git  ## 查看git目录下的结构</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">git status          					###  当前分支的文件修改状态</span><br><span class="line">git add （文件名）   					###  将文件添加到缓存区</span><br><span class="line">git commit		        				###  提交缓存区的改动</span><br><span class="line">git remote -v       					###  显示远程地址信息</span><br><span class="line">git push 			   					###  推送到远程系统</span><br><span class="line">git log				   					###  查看提交日志</span><br><span class="line">git branch             			 		###  查看本地分支</span><br><span class="line">git branch -av          		 		###  查看本地和远程分支</span><br><span class="line">git branch &lt;name&gt;       				 ###  创建本地分支</span><br><span class="line">git checkout &lt;name&gt;    			 		###  切换分支</span><br><span class="line">git checkout -b &lt;name&gt; 			 		###  创建+切换分支</span><br><span class="line">git merge &lt;name&gt;						###  合并某分支到当前分支</span><br><span class="line">git branch -d &lt;name&gt;    		 		###  删除本地分支</span><br><span class="line">git push origin —delete &lt;name&gt;   		 ###  删除远程分支</span><br><span class="line">git stash                         		###  保留修改文件到缓存</span><br><span class="line">git stash list                    		###  查看所有的缓存</span><br><span class="line">git stash pop                     		###  加载第一个文件到缓存区</span><br><span class="line">git diff &lt;name&gt;				     		###  工作区 和 stage区对比</span><br><span class="line">git diff --stage &lt;name&gt;           		###  stage和history区对比</span><br><span class="line">git checkout &lt;name&gt;               		###  从stage到工作区域</span><br><span class="line">git reset              			 		###  从history到本地</span><br><span class="line">git checkout -b 本地分支名 origin/远程分支名  ### 拉取远程分支到本地分支</span><br><span class="line"></span><br><span class="line">git cherry-pick &lt;commit-id&gt;				### 分支合并commit</span><br><span class="line"></span><br><span class="line">git checkout --theirs &lt;name&gt;		     ### 当合并文件冲突时候，用其他分支的代码</span><br><span class="line">git checkout --ours	  &lt;name&gt;			 ### 当合并冲突时,用本分支的代码</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/06/git/">展开全文 >></a>
         </p>
       
 
