@@ -143,6 +143,214 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-spring-boot" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/06/spring-boot/">spring-boot</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/06/spring-boot/" class="archive-article-date">
+  	<time datetime="2020-04-06T07:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="原理初探"><a href="#原理初探" class="headerlink" title="原理初探"></a>原理初探</h2><p>+++</p>
+<h3 id="自动配置"><a href="#自动配置" class="headerlink" title="自动配置"></a>自动配置</h3><p><strong>pom.xml</strong></p>
+<ul>
+<li><p>spring-boot-dependences 核心依赖在父工程中</p>
+</li>
+<li><p>我们在引入一些spring-boot依赖的时候 不需要制定版本 因为有这些版本仓库     </p>
+</li>
+</ul>
+<p><strong>启动器</strong></p>
+<ul>
+<li><pre><code class="xml">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+<span class="comment"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">+ 启动器 说白了就是启动场景</span><br><span class="line"></span><br><span class="line">+ 比如spring-boot-start-web就是启动web服务相关的依赖</span><br><span class="line"></span><br><span class="line">+ springboot会把所有的场景转换成一个一个的启动器</span><br><span class="line"></span><br><span class="line">+ 如果我们要使用什么功能就只需要找到启动器就可以了</span><br><span class="line"></span><br><span class="line">**主程序**</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;java</span><br><span class="line">@SpringBootApplication &#x2F;&#x2F;标注这个类是一个springboot应用</span><br><span class="line">public class HelloApplication &#123;</span><br><span class="line">    &#x2F;&#x2F;将springboot应用启动</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(HelloApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span></code></pre>
+</li>
+<li><p>注解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication	</span><br><span class="line">	@SpringBootConfiguration springboot的配置</span><br><span class="line">		@Configuration spring配置类</span><br><span class="line">		@Component 本身是一个spring的组件</span><br><span class="line">	@EnableAutoConfiguration 自动导入配置</span><br><span class="line">		@AutoConfigurationPackage 自动配置包</span><br><span class="line">			@Import(&#123;Registrar.class&#125;)</span><br><span class="line">		@Import(&#123;AutoConfigurationImportSelector.class&#125;) 导入选择器</span><br><span class="line">	&#x2F;&#x2F;获取所有的配置</span><br><span class="line">	List&lt;String&gt; configurations &#x3D; this.getCandidateConfigurations(annotationMetadata, attributes);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>获取候选的配置</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> List&lt;String&gt; <span class="title">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(<span class="keyword">this</span>.getSpringFactoriesLoaderFactoryClass(), <span class="keyword">this</span>.getBeanClassLoader());</span><br><span class="line">    Assert.notEmpty(configurations, <span class="string">"No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct."</span>);</span><br><span class="line">    <span class="keyword">return</span> configurations;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; getSpringFactoriesLoaderFactoryClass() &#123;</span><br><span class="line">    <span class="keyword">return</span> EnableAutoConfiguration<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>自动配置的核心文件 META-INF/spring.factories</strong></p>
+<p><img src="C:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200406154502231.png" alt="image-20200406154502231"></p>
+<p><strong>结论</strong>：</p>
+<p>springboot所有自动配置都是启动时扫描并加载。spring.factories所有的自动配置类都在这里面，但是不一定生效 要判断条件是否成立，只要导入了对应的start 就有相应的启动器了 有了启动器自动装配的才会生效</p>
+<ul>
+<li>springboot在启动的时候，从类路径下/META-INF/spring.factories获取指定配置</li>
+<li>将这些自动配置的类导入容器，自动配置就会生效，帮我们进行自动配置</li>
+<li>以前我们需要自动配置的东西，现在pringboot帮我们做了</li>
+<li>整合javaEE 解决方案和自动配置的东西都在spring-boot-autoconfigure-2.2.0.RELEASE.jar这个包下</li>
+<li>它会把所有需要导入的组件，以类名的方式返回，这些组件就会被添加到容器</li>
+<li>容器中也会存在非常多的xxxAutoConfiguration的文件（@Bean）就是这些类给容器中导入了这个场景需要的所有组件，并自动配置 @Configuration javaconfig</li>
+<li>有了自动类，避免了我们手动配置编写配置文件的工作</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/06/spring-boot/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-linux磁盘追加" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/05/linux%E7%A3%81%E7%9B%98%E8%BF%BD%E5%8A%A0/">linux磁盘追加</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/05/linux%E7%A3%81%E7%9B%98%E8%BF%BD%E5%8A%A0/" class="archive-article-date">
+  	<time datetime="2020-04-05T08:53:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="root追加空间"><a href="#root追加空间" class="headerlink" title="root追加空间"></a>root追加空间</h2><p>+++</p>
+<p>原因：给root下分配更多的空间  /home下的空间未使用 从home目录下分配一下空间给root</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon /]# df -hl</span><br><span class="line">Filesystem                     Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs                       2.7G     0  2.7G   0% /dev</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% /dev/shm</span><br><span class="line">tmpfs                          2.7G   12M  2.7G   1% /run</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/centos_bogon-root   50G  1.8G   49G   4% /</span><br><span class="line">/dev/sda1                     1014M  176M  839M  18% /boot</span><br><span class="line">/dev/mapper/centos_bogon-home   44G   33M   44G   1% /home</span><br><span class="line">tmpfs                          544M     0  544M   0% /run/user/0</span><br></pre></td></tr></table></figure>
+
+<p>步骤：</p>
+<ul>
+<li><p>先进行home目录的备份</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;</span><br><span class="line">tar -czvf home.tgz home&#x2F;</span><br><span class="line">mv home.tgz &#x2F;tmp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>卸载home目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;安装fuser</span><br><span class="line">yum -y install psmisc</span><br><span class="line"></span><br><span class="line">fuser -km &#x2F;home&#x2F;</span><br><span class="line"></span><br><span class="line">umount &#x2F;home</span><br><span class="line"></span><br><span class="line">lvremove &#x2F;dev&#x2F;mapper&#x2F;centos_bogon-home   &#x2F;&#x2F;对话框 y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这时候可以查看下目录，把空间分配给root</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon /]# df -hl</span><br><span class="line">Filesystem                     Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs                       2.7G     0  2.7G   0% /dev</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% /dev/shm</span><br><span class="line">tmpfs                          2.7G   12M  2.7G   1% /run</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/centos_bogon-root   50G  1.8G   49G   4% /</span><br><span class="line">/dev/sda1                     1014M  176M  839M  18% /boot</span><br><span class="line">tmpfs                          544M     0  544M   0% /run/user/0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">lvextend -L +30G /dev/mapper/centos_bogon-root</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在空间是追加了，然后就是要扩展/root的文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">xfs_growfs &#x2F;dev&#x2F;mapper&#x2F;centos_bogon-root</span><br><span class="line"></span><br><span class="line">[root@bogon &#x2F;]# df -h</span><br><span class="line">Filesystem                     Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs                       2.7G     0  2.7G   0% &#x2F;dev</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% &#x2F;dev&#x2F;shm</span><br><span class="line">tmpfs                          2.7G   12M  2.7G   1% &#x2F;run</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% &#x2F;sys&#x2F;fs&#x2F;cgroup</span><br><span class="line">&#x2F;dev&#x2F;mapper&#x2F;centos_bogon-root   80G  1.8G   79G   3% &#x2F;</span><br><span class="line">&#x2F;dev&#x2F;sda1                     1014M  176M  839M  18% &#x2F;boot</span><br><span class="line">tmpfs                          544M     0  544M   0% &#x2F;run&#x2F;user&#x2F;0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>恢复home目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">lvcreate -L 10G -n &#x2F;dev&#x2F;mapper&#x2F;centos_bogon-home      ## 分配空间</span><br><span class="line"></span><br><span class="line">mkfs.xfs &#x2F;dev&#x2F;mapper&#x2F;centos_bogon-home                ## 创建文件系统</span><br><span class="line"></span><br><span class="line">mount &#x2F;dev&#x2F;mapper&#x2F;centos_bogon-home                   ## 把home目录挂载回去</span><br><span class="line"></span><br><span class="line">tar -xzvf &#x2F;tmp&#x2F;home.tgz -C &#x2F;home   </span><br><span class="line">&#x2F;&#x2F;这时会有两层home目录，这个也可以压缩时在home下压缩，就不会有这步操作了</span><br><span class="line">mv * ..&#x2F;</span><br><span class="line">cd ..</span><br><span class="line">rm -rf home</span><br><span class="line"></span><br><span class="line">[root@bogon home]# df -hl</span><br><span class="line">Filesystem                     Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs                       2.7G     0  2.7G   0% &#x2F;dev</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% &#x2F;dev&#x2F;shm</span><br><span class="line">tmpfs                          2.7G   12M  2.7G   1% &#x2F;run</span><br><span class="line">tmpfs                          2.7G     0  2.7G   0% &#x2F;sys&#x2F;fs&#x2F;cgroup</span><br><span class="line">&#x2F;dev&#x2F;mapper&#x2F;centos_bogon-root   80G  1.8G   79G   3% &#x2F;</span><br><span class="line">&#x2F;dev&#x2F;sda1                     1014M  176M  839M  18% &#x2F;boot</span><br><span class="line">tmpfs                          544M     0  544M   0% &#x2F;run&#x2F;user&#x2F;0</span><br><span class="line">&#x2F;dev&#x2F;mapper&#x2F;centos_bogon-home   10G   33M   10G   1% &#x2F;home</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术分享</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/05/linux%E7%A3%81%E7%9B%98%E8%BF%BD%E5%8A%A0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-aop" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -454,11 +662,9 @@
 <li><p>测试</p>
 </li>
 </ol>
-<h3 id="回忆mybatis"><a href="#回忆mybatis" class="headerlink" title="回忆mybatis"></a>回忆mybatis</h3><pre><code>1. 编写实体类
-2. 编写核心配置文件
-3. 编写接口
-4. 编写Mapper.xml
-5. 测试</code></pre><h3 id="mybatis-spring"><a href="#mybatis-spring" class="headerlink" title="mybatis-spring"></a>mybatis-spring</h3><p>方式一：</p>
+<h3 id="回忆mybatis"><a href="#回忆mybatis" class="headerlink" title="回忆mybatis"></a>回忆mybatis</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">    1. 编写实体类</span><br><span class="line">    2. 编写核心配置文件</span><br><span class="line">    3. 编写接口</span><br><span class="line">    4. 编写Mapper.xml</span><br><span class="line">    <span class="meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">"-//mybatis.org//DTD Config 3.0//EN"</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.tong.cong.mapper.UserMapper"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"serch"</span> <span class="attr">resultType</span>=<span class="string">"com.tong.cong.pojo.User"</span>&gt;</span></span><br><span class="line">    select * from user</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"addUser"</span> <span class="attr">parameterType</span>=<span class="string">"User"</span>&gt;</span></span><br><span class="line">        Insert into user values (#&#123;id&#125;, #&#123;name&#125;, #&#123;pwd&#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">"deleteUser"</span> <span class="attr">parameterType</span>=<span class="string">"User"</span>&gt;</span></span><br><span class="line">        delete from user where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br><span class="line">    5. 测试</span><br></pre></td></tr></table></figure>
+
+<h3 id="mybatis-spring"><a href="#mybatis-spring" class="headerlink" title="mybatis-spring"></a>mybatis-spring</h3><p>方式一：</p>
 <ol>
 <li><p>编写数据源</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"daatasource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"com.mysql.jdbc.Driver"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"jdbc:mysql://192.168.1.183:3306/tc?useSSL=false<span class="symbol">&amp;amp;</span>useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=utf8<span class="symbol">&amp;amp;</span>serverTimezone=Asia/Shanghai"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"root"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"!QAZxsw2"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -540,11 +746,11 @@
 <li><p>编程式事务</p>
 </li>
 <li><p>声明式事务</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"daatasource"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--结合aop实现事务的植入--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置事务的通知--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">"txAdvice"</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 给事件方法配置事务--&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--配置事务的传播特性 new propagation--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"*"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pointcut"</span> <span class="attr">expression</span>=<span class="string">"execution(* com.tong.cong.mapper.*.*(..))"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"txAdvice"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:advisor</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>注意：事务的相关方法要写在切面的地方</p>
 </li>
 </ul>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"daatasource"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--结合aop实现事务的植入--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置事务的通知--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">"txAdv&lt;?xml version="</span><span class="attr">1.0</span>" <span class="attr">encoding</span>=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:aop</span>=<span class="string">"http://www.springframework.org/schema/aop"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:tx</span>=<span class="string">"http://www.springframework.org/schema/tx"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"daatasource"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--结合aop实现事务的植入--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置事务的通知--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">"txAdvice"</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 给事件方法配置事务--&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--配置事务的传播特性 new propagation--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"*"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pointcut"</span> <span class="attr">expression</span>=<span class="string">"execution(* com.tong.cong.mapper.*.*(..))"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"txAdvice"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:advisor</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span>ice" transaction-manager="transactionManager"&gt;</span><br><span class="line">        <span class="comment">&lt;!-- 给事件方法配置事务--&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--配置事务的传播特性 new propagation--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"*"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pointcut"</span> <span class="attr">expression</span>=<span class="string">"execution(* com.tong.cong.mapper.*.*(..))"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"txAdvice"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:advisor</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>  注意：事务的相关方法要写在切面的地方</p>
 
       
 
@@ -1103,96 +1309,10 @@
 
 
   
-    <article id="post-my-first-blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/12/02/my-first-blog/">正见</a>
-    </h1>
-  
-
-        
-        <a href="/2013/12/02/my-first-blog/" class="archive-article-date">
-  	<time datetime="2013-12-02T07:30:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2013-12-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="书中讲述了哪些内容"><a href="#书中讲述了哪些内容" class="headerlink" title="书中讲述了哪些内容"></a>书中讲述了哪些内容</h2><ol>
-<li>造作与无常</li>
-<li>情绪与痛苦</li>
-<li>一切是空</li>
-<li>涅槃超越概念</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">读书感悟</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书感悟//" class="article-tag-list-link color5">读书感悟</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2013/12/02/my-first-blog/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 
