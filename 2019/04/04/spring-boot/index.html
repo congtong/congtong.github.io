@@ -17,7 +17,7 @@
 <meta property="og:locale" content="cn">
 <meta property="og:image" content="c:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200406154502231.png">
 <meta property="article:published_time" content="2019-04-04T07:07:05.000Z">
-<meta property="article:modified_time" content="2020-04-06T09:45:13.767Z">
+<meta property="article:modified_time" content="2020-04-09T12:06:58.484Z">
 <meta property="article:author" content="tongcong">
 <meta property="article:tag" content="技术分享">
 <meta name="twitter:card" content="summary">
@@ -203,6 +203,93 @@
 <li>它会把所有需要导入的组件，以类名的方式返回，这些组件就会被添加到容器</li>
 <li>容器中也会存在非常多的xxxAutoConfiguration的文件（@Bean）就是这些类给容器中导入了这个场景需要的所有组件，并自动配置 @Configuration javaconfig</li>
 <li>有了自动类，避免了我们手动配置编写配置文件的工作</li>
+</ul>
+<p><strong>配置文件赋值</strong></p>
+<p>给配置文件赋值的方式：</p>
+<ul>
+<li><p>方式一：yml赋值</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">person:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">cong$&#123;random.uuid&#125;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">happy:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">birthday:</span> <span class="number">2019</span><span class="string">/11/11</span></span><br><span class="line">  <span class="attr">maps:</span> <span class="string">&#123;K1:</span> <span class="string">v1,</span> <span class="attr">k2:</span> <span class="string">v2&#125;</span></span><br><span class="line">  <span class="attr">hello:</span> <span class="string">哈喽</span></span><br><span class="line">  <span class="attr">list:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">code</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">music</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">girl</span></span><br><span class="line">  <span class="attr">dog:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">$&#123;person.hello:hello&#125;_旺财</span></span><br><span class="line">    <span class="attr">age:</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>java的配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"person"</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>方式二： properties赋值 这个只能一个一个的赋值</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name</span>=<span class="string">"cong"</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PropertySource</span>(value = <span class="string">"classpath:xxx.properties"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;name&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br></pre></td></tr></table></figure>
+
+<p><strong>yml的特性</strong></p>
+<ul>
+<li><p>松散绑定</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">first-name: xxx</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String firstName;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JSR303校验</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">类上注解：</span><br><span class="line">    <span class="meta">@Validated</span></span><br><span class="line">    </span><br><span class="line">属性上注解：</span><br><span class="line">    <span class="meta">@Email</span>(message = <span class="string">"格式错误"</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>多环境切换</strong></p>
+<ul>
+<li><p>配置文件的优先级(自动生成的配置文件的位置优先级是最低的)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">file:.&#x2F;config&#x2F;</span><br><span class="line"></span><br><span class="line">file:.&#x2F;</span><br><span class="line"></span><br><span class="line">classpath:&#x2F;config&#x2F;</span><br><span class="line"></span><br><span class="line">classpath:&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>yml的可以在一个文件的  也可以分文件</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">    <span class="attr">address:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.100</span>  </span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">	<span class="attr">profiles:</span></span><br><span class="line">		<span class="attr">active:</span> <span class="string">production</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">    <span class="attr">profiles:</span> <span class="string">development</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">    <span class="attr">address:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">    <span class="attr">profiles:</span> <span class="string">production</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">    <span class="attr">address:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.120</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<p><strong>自动装配的原理</strong></p>
+<ul>
+<li>SpringBoot启动会加载大量的配置类</li>
+<li>我们看我们需要的功能有没有在springboot默认写好的自动配置类当中</li>
+<li>我们再来看这个自动配置类中到底配置了哪些组件：只要我们的组件存在，我们其实是不需要做配置的</li>
+<li>给容器中自动配置类添加组件的时候 会从properties类中获取某些属性 我们只需要在配置文件中指定这些属性额值即可</li>
+<li>xxxAutoConfigurartion 自动配置类 给容器添加组件</li>
+<li>xxxProperties 封装配置类的属性</li>
+</ul>
+<p><strong>SpringBoot开发网站</strong></p>
+<ul>
+<li><p>导入静态资源</p>
+<p>加载静态资源：</p>
+<p>最好不要改配置。默认可以访问到的路径</p>
+<ol>
+<li>webjars 可以访问官网 然后用maven下载 <a href="https://www.webjars.org/" target="_blank" rel="noopener">https://www.webjars.org/</a>     输入地址<a href="http://localhost:9987/webjars目录即可" target="_blank" rel="noopener">http://localhost:9987/webjars目录即可</a></li>
+<li>第二种是放到classpath下的目录下即可访问：先后顺序为 resources static public   输入地址 <a href="http://localhost:9987/文件名" target="_blank" rel="noopener">http://localhost:9987/文件名</a></li>
+</ol>
+<p>以下是静态资源加载的源码分析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.resourceProperties.isAddMappings()) &#123;</span><br><span class="line">        logger.debug(<span class="string">"Default resource handling disabled"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Duration cachePeriod = <span class="keyword">this</span>.resourceProperties.getCache().getPeriod();</span><br><span class="line">        CacheControl cacheControl = <span class="keyword">this</span>.resourceProperties.getCache().getCachecontrol().toHttpCacheControl();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(<span class="string">"/webjars/**"</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(<span class="keyword">new</span> String[]&#123;<span class="string">"/webjars/**"</span>&#125;).addResourceLocations(<span class="keyword">new</span> String[]&#123;<span class="string">"classpath:/META-INF/resources/webjars/"</span>&#125;).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String staticPathPattern = <span class="keyword">this</span>.mvcProperties.getStaticPathPattern();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(staticPathPattern)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(<span class="keyword">new</span> String[]&#123;staticPathPattern&#125;).addResourceLocations(WebMvcAutoConfiguration.getResourceLocations(<span class="keyword">this</span>.resourceProperties.getStaticLocations())).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>首页</p>
+<p>只需要在静态资源目录下新建html文件即可 访问时加上路径</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> WelcomePageHandlerMapping <span class="title">welcomePageHandlerMapping</span><span class="params">(ApplicationContext applicationContext, FormattingConversionService mvcConversionService, ResourceUrlProvider mvcResourceUrlProvider)</span> </span>&#123;</span><br><span class="line">    WelcomePageHandlerMapping welcomePageHandlerMapping = <span class="keyword">new</span> WelcomePageHandlerMapping(<span class="keyword">new</span> TemplateAvailabilityProviders(applicationContext), applicationContext, <span class="keyword">this</span>.getWelcomePage(), <span class="keyword">this</span>.mvcProperties.getStaticPathPattern());</span><br><span class="line">    welcomePageHandlerMapping.setInterceptors(<span class="keyword">this</span>.getInterceptors(mvcConversionService, mvcResourceUrlProvider));</span><br><span class="line">    <span class="keyword">return</span> welcomePageHandlerMapping;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Optional&lt;Resource&gt; <span class="title">getWelcomePage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String[] locations = WebMvcAutoConfiguration.getResourceLocations(<span class="keyword">this</span>.resourceProperties.getStaticLocations());</span><br><span class="line">    <span class="keyword">return</span> Arrays.stream(locations).map(<span class="keyword">this</span>::getIndexHtml).filter(<span class="keyword">this</span>::isReadable).findFirst();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Resource <span class="title">getIndexHtml</span><span class="params">(String location)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.resourceLoader.getResource(location + <span class="string">"index.html"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>jsp 还是模板引擎</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在templates目录下的所有页面，只能通过Controller来跳转</span></span><br><span class="line"><span class="comment">//还需要导入模板引擎</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"hello"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">放到templates下边</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>装配扩展SpringMvc</p>
+</li>
+<li><p>增删改查</p>
+</li>
+<li><p>拦截器</p>
+</li>
+<li><p>国际化</p>
+</li>
 </ul>
 
       
@@ -446,6 +533,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">日常杂记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">视频诊断</a>
               </li>
             
             <div class="clearfix"></div>

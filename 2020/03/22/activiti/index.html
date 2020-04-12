@@ -8,18 +8,21 @@
   <link rel="dns-prefetch" href="https://congtong.github.io">
   <title>activiti | </title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="什么是工作流工作流（workflow）是对工作流程及其各操作步骤之间业务规则的抽象，概括描述 工作流的好处 可以快速响应、灵活调整线上流程 业务和开发基于流程模型沟通，基于业务建模快速部署 流程可视化，方便查看流程的运行进行  工作流技术选型JBPM Activiti activiti6.0快速体验">
+  <meta name="description" content="什么是工作流工作流（workflow）是对工作流程及其各操作步骤之间业务规则的抽象，概括描述 工作流的好处 可以快速响应、灵活调整线上流程 业务和开发基于流程模型沟通，基于业务建模快速部署 流程可视化，方便查看流程的运行进行  工作流技术选型JBPM Activiti # activiti 源码初体验 下载源码 12345git clone git@gitee.com:tongcong&#x2F;Activ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="activiti">
 <meta property="og:url" content="https://congtong.github.io/2020/03/22/activiti/index.html">
 <meta property="og:site_name">
-<meta property="og:description" content="什么是工作流工作流（workflow）是对工作流程及其各操作步骤之间业务规则的抽象，概括描述 工作流的好处 可以快速响应、灵活调整线上流程 业务和开发基于流程模型沟通，基于业务建模快速部署 流程可视化，方便查看流程的运行进行  工作流技术选型JBPM Activiti activiti6.0快速体验">
+<meta property="og:description" content="什么是工作流工作流（workflow）是对工作流程及其各操作步骤之间业务规则的抽象，概括描述 工作流的好处 可以快速响应、灵活调整线上流程 业务和开发基于流程模型沟通，基于业务建模快速部署 流程可视化，方便查看流程的运行进行  工作流技术选型JBPM Activiti # activiti 源码初体验 下载源码 12345git clone git@gitee.com:tongcong&#x2F;Activ">
 <meta property="og:locale" content="cn">
+<meta property="og:image" content="c:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200412092542804.png">
+<meta property="og:image" content="c:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200412113045361.png">
 <meta property="article:published_time" content="2020-03-22T01:28:23.000Z">
-<meta property="article:modified_time" content="2020-03-22T01:52:42.977Z">
+<meta property="article:modified_time" content="2020-04-12T23:54:57.412Z">
 <meta property="article:author" content="tongcong">
 <meta property="article:tag" content="cong.tong">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200412092542804.png">
   
     <link rel="alternative" href="/atom.xml" title="" type="application/atom+xml">
   
@@ -173,7 +176,65 @@
 </ol>
 <h1 id="工作流技术选型"><a href="#工作流技术选型" class="headerlink" title="工作流技术选型"></a>工作流技术选型</h1><p>JBPM</p>
 <p>Activiti</p>
-<h1 id="activiti6-0快速体验"><a href="#activiti6-0快速体验" class="headerlink" title="activiti6.0快速体验"></a>activiti6.0快速体验</h1>
+<h1 id="activiti-源码初体验"><a href="#activiti-源码初体验" class="headerlink" title="# activiti 源码初体验"></a># activiti 源码初体验</h1><ol>
+<li><p>下载源码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone git@gitee.com:tongcong/Activiti.git   ## 由于github网速很慢 所有先从github导入到码云</span><br><span class="line"></span><br><span class="line">git checkout -b study6 activiti-6.0.0    切换到6.0.0分支</span><br><span class="line"></span><br><span class="line">mvn clean test-compile #  对源码进行编译后才能导入到idea</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>模块介绍</p>
+<p><img src="C:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200412092542804.png" alt="image-20200412092542804"></p>
+</li>
+</ol>
+<p>activiti-engine 的代码占了大概百分之九十  依赖其他的模块</p>
+<p>activiti-app  基于源码运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">cd modules/activiti-ui/activiti-app</span><br><span class="line"></span><br><span class="line">mvn clean tomcat7:run</span><br><span class="line"></span><br><span class="line">访问 http://localhost:9999/activiti-app</span><br><span class="line"></span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">也可以使用start-jrebel.sh  这事热部署模式</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">echo "Building all submodules"</span><br><span class="line">mvn -T 1C clean install -DskipTests</span><br><span class="line">STATUS=$?</span><br><span class="line">if [ $STATUS -eq 0 ]</span><br><span class="line">then</span><br><span class="line">	cd activiti-app</span><br><span class="line"></span><br><span class="line"><span class="meta">	#</span><span class="bash"> Run war</span></span><br><span class="line">	echo "Running war file"</span><br><span class="line">	export MAVEN_OPTS="$MAVEN_OPTS -noverify -Xms512m -Xmx1024m -XX:MaxPermSize=512m -javaagent:/Applications/ZeroTurnaround/JRebel/jrebel.jar -Xdebug -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"</span><br><span class="line">	mvn clean tomcat7:run</span><br><span class="line">else</span><br><span class="line">	say -v Cellos "Dum dum dum dum dum dum dum he he he ho ho ho fa lah lah lah lah lah lah fa lah full hoo hoo hoo"</span><br><span class="line">    echo "Error while building root pom. Halting."</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>activiti-ui的介绍</p>
+<table>
+<thead>
+<tr>
+<th>activiti-app</th>
+<th>集成发布成war工程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>activiti-app-conf</td>
+<td>UI独立于业务外的配置    jar包</td>
+</tr>
+<tr>
+<td>activiti-app-logic</td>
+<td>UI的业务逻辑                  jar包</td>
+</tr>
+<tr>
+<td>activiti-app-rest</td>
+<td>提供接口的rest-api         jar包</td>
+</tr>
+</tbody></table>
+<p>hello-world之activiti6.0</p>
+<p>1、二级审批流程</p>
+<ul>
+<li><p>Eclipse（设计流程图）</p>
+<p><img src="C:%5CUsers%5Csnow%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200412113045361.png" alt="image-20200412113045361"></p>
+<p>Properties 可以一开始没有  需要找到window-&gt;Perspective-&gt;Open Perspective-&gt;Other-&gt;activiti</p>
+</li>
+<li><p>idea 创建maven工程</p>
+</li>
+<li><p>基于命令行交互的小程序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建流程引擎  </span></span><br><span class="line"><span class="comment">///   ProcessEngineConfiguration</span></span><br><span class="line">ProcessEngineConfiguration cfg =</span><br><span class="line">        ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();</span><br><span class="line">ProcessEngine processEngine = cfg.buildProcessEngine();</span><br><span class="line"></span><br><span class="line"><span class="comment">//第一步需要创建processEngine</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加载流程图 基本上一下都是通过processEngine获取service</span></span><br><span class="line"><span class="comment">//processEngine.getRepositoryService()</span></span><br><span class="line">RepositoryService repositoryService = processEngine.getRepositoryService();</span><br><span class="line"><span class="comment">//创建一个发布哦那个其</span></span><br><span class="line">DeploymentBuilder deployment = repositoryService.createDeployment();</span><br><span class="line">deployment.addClasspathResource(<span class="string">"second_approve.bpmn20.xml"</span>);</span><br><span class="line"><span class="comment">//发布对象</span></span><br><span class="line">Deployment deploy = deployment.deploy();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//启动实例</span></span><br><span class="line">RuntimeService runtimeService = processEngine.getRuntimeService();</span><br><span class="line"></span><br><span class="line"><span class="comment">//这个还不了解 </span></span><br><span class="line">ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploy.getId()).singleResult();</span><br><span class="line"></span><br><span class="line"><span class="comment">//流程实例有了</span></span><br><span class="line">ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId());</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 处理任务</span></span><br><span class="line">Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line"><span class="keyword">while</span> (processInstance != <span class="keyword">null</span> &amp;&amp; !processInstance.isEnded()) &#123;</span><br><span class="line">    TaskService taskService = processEngine.getTaskService();</span><br><span class="line">    List&lt;Task&gt; list = taskService.createTaskQuery().list();</span><br><span class="line">    <span class="keyword">for</span> (Task task : list) &#123;</span><br><span class="line">        TaskFormData taskFormData = processEngine.getFormService().getTaskFormData(task.getId());</span><br><span class="line">        List&lt;FormProperty&gt; formProperties = taskFormData.getFormProperties();</span><br><span class="line">        Map&lt;String, Object&gt; variables = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</span><br><span class="line">        <span class="keyword">for</span> (FormProperty formProperty : formProperties) &#123;</span><br><span class="line">            log.info(<span class="string">"请输入&#123;&#125;"</span>, formProperty.getName());</span><br><span class="line">            String s = scanner.nextLine();</span><br><span class="line">            <span class="keyword">if</span> (StringFormType<span class="class">.<span class="keyword">class</span>.<span class="title">isInstance</span>(<span class="title">formProperty</span>.<span class="title">getType</span>())) </span>&#123;</span><br><span class="line">                variables.put(formProperty.getId(), s);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (DateFormType<span class="class">.<span class="keyword">class</span>.<span class="title">isInstance</span>(<span class="title">formProperty</span>.<span class="title">getType</span>())) </span>&#123;</span><br><span class="line">                SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line">                Date parse = sdf.parse(s);</span><br><span class="line">                variables.put(formProperty.getId(), parse);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        taskService.complete(task.getId(), variables);</span><br><span class="line">        processInstance =</span><br><span class="line">            processEngine</span><br><span class="line">            .getRuntimeService()</span><br><span class="line">            .createProcessInstanceQuery()</span><br><span class="line">            .processInstanceId(processInstance.getId())</span><br><span class="line">            .singleResult();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
       
 
       
@@ -283,7 +344,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是工作流"><span class="toc-number">1.</span> <span class="toc-text">什么是工作流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#工作流的好处"><span class="toc-number">2.</span> <span class="toc-text">工作流的好处</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#工作流技术选型"><span class="toc-number">3.</span> <span class="toc-text">工作流技术选型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#activiti6-0快速体验"><span class="toc-number">4.</span> <span class="toc-text">activiti6.0快速体验</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是工作流"><span class="toc-number">1.</span> <span class="toc-text">什么是工作流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#工作流的好处"><span class="toc-number">2.</span> <span class="toc-text">工作流的好处</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#工作流技术选型"><span class="toc-number">3.</span> <span class="toc-text">工作流技术选型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#activiti-源码初体验"><span class="toc-number">4.</span> <span class="toc-text"># activiti 源码初体验</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -404,6 +465,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">日常杂记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">视频诊断</a>
               </li>
             
             <div class="clearfix"></div>

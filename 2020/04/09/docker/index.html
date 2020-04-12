@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://congtong.github.io">
-  <title>正见 | </title>
+  <title>docker | </title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="讲述佛陀的证悟，真正的佛学里没有神。">
+  <meta name="description" content="先记录一个dockerfile的模板123456789101112131415161718192021222324252627282930313233# This my first nginx Dockerfile# Version 1.0# Base images 基础镜像FROM centos#MAINTAINER 维护者信息MAINTAINER tianfeiyu #ENV 设置环境变量EN">
 <meta property="og:type" content="article">
-<meta property="og:title" content="正见">
-<meta property="og:url" content="https://congtong.github.io/2013/12/02/my-first-blog/index.html">
+<meta property="og:title" content="docker">
+<meta property="og:url" content="https://congtong.github.io/2020/04/09/docker/index.html">
 <meta property="og:site_name">
-<meta property="og:description" content="讲述佛陀的证悟，真正的佛学里没有神。">
+<meta property="og:description" content="先记录一个dockerfile的模板123456789101112131415161718192021222324252627282930313233# This my first nginx Dockerfile# Version 1.0# Base images 基础镜像FROM centos#MAINTAINER 维护者信息MAINTAINER tianfeiyu #ENV 设置环境变量EN">
 <meta property="og:locale" content="cn">
-<meta property="article:published_time" content="2013-12-02T07:30:16.000Z">
-<meta property="article:modified_time" content="2020-03-21T06:26:54.734Z">
+<meta property="og:image" content="e:%5Cblog%5Chexo1%5Cpublic%5Cimg%5C%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20200409174100.png">
+<meta property="article:published_time" content="2020-04-09T09:36:37.000Z">
+<meta property="article:modified_time" content="2020-04-09T09:42:14.767Z">
 <meta property="article:author" content="tongcong">
-<meta property="article:tag" content="读书感悟">
+<meta property="article:tag" content="技术分享">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="e:%5Cblog%5Chexo1%5Cpublic%5Cimg%5C%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20200409174100.png">
   
     <link rel="alternative" href="/atom.xml" title="" type="application/atom+xml">
   
@@ -145,32 +147,29 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-my-first-blog" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-docker" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      正见
+      docker
     </h1>
   
 
         
-        <a href="/2013/12/02/my-first-blog/" class="archive-article-date">
-  	<time datetime="2013-12-02T07:30:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2013-12-02</time>
+        <a href="/2020/04/09/docker/" class="archive-article-date">
+  	<time datetime="2020-04-09T09:36:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="书中讲述了哪些内容"><a href="#书中讲述了哪些内容" class="headerlink" title="书中讲述了哪些内容"></a>书中讲述了哪些内容</h2><ol>
-<li>造作与无常</li>
-<li>情绪与痛苦</li>
-<li>一切是空</li>
-<li>涅槃超越概念</li>
-</ol>
+        <h3 id="先记录一个dockerfile的模板"><a href="#先记录一个dockerfile的模板" class="headerlink" title="先记录一个dockerfile的模板"></a>先记录一个dockerfile的模板</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This my first nginx Dockerfile</span></span><br><span class="line"><span class="comment"># Version 1.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Base images 基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> centos</span><br><span class="line"></span><br><span class="line"><span class="comment">#MAINTAINER 维护者信息</span></span><br><span class="line"><span class="keyword">MAINTAINER</span> tianfeiyu </span><br><span class="line"></span><br><span class="line"><span class="comment">#ENV 设置环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> PATH /usr/local/nginx/sbin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="comment">#ADD  文件放在当前目录下，拷过去会自动解压</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> nginx-1.8.0.tar.gz /usr/<span class="built_in">local</span>/  </span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> epel-release-latest-7.noarch.rpm /usr/<span class="built_in">local</span>/  </span></span><br><span class="line"></span><br><span class="line"><span class="comment">#RUN 执行以下命令 </span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> rpm -ivh /usr/<span class="built_in">local</span>/epel-release-latest-7.noarch.rpm</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> yum install -y wget lftp gcc gcc-c++ make openssl-devel pcre-devel pcre &amp;&amp; yum clean all</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> useradd -s /sbin/nologin -M www</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#WORKDIR 相当于cd</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /usr/<span class="built_in">local</span>/nginx-1.8.0 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> ./configure --prefix=/usr/<span class="built_in">local</span>/nginx --user=www --group=www --with-http_ssl_module --with-pcre &amp;&amp; make &amp;&amp; make install</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"daemon off;"</span> &gt;&gt; /etc/nginx.conf</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#EXPOSE 映射端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#CMD 运行以下命令</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"nginx"</span>]</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="E:%5Cblog%5Chexo1%5Cpublic%5Cimg%5C%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20200409174100.png" alt=""></p>
 
       
 
@@ -184,24 +183,13 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">读书感悟</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术分享</a>
         		</li>
       		
 		</ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书感悟//" class="article-tag-list-link color5">读书感悟</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
 
       
 
@@ -251,7 +239,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://congtong.github.io/2013/12/02/my-first-blog/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://congtong.github.io/2020/04/09/docker/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -265,15 +253,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/04/spring-boot/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/04/12/idea%E5%BF%AB%E6%8D%B7%E9%94%AE%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          spring-boot
+          idea快捷键总结
         
       </div>
     </a>
   
+  
+    <a href="/2020/04/09/thread/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">thread</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -298,7 +291,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#书中讲述了哪些内容"><span class="toc-number">1.</span> <span class="toc-text">书中讲述了哪些内容</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#先记录一个dockerfile的模板"><span class="toc-number">1.</span> <span class="toc-text">先记录一个dockerfile的模板</span></a></li></ol>
                     </div>
                 </span>
             </div>

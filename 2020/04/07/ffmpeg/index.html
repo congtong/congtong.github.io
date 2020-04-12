@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://congtong.github.io">
-  <title>正见 | </title>
+  <title>ffmpeg | </title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="讲述佛陀的证悟，真正的佛学里没有神。">
+  <meta name="description" content="前言ffmpeg 是一款处理视频音频的工具 命令行总结 转换amr到mp3：  1ffmpeg -i xxx1.amr xxxx2.mp3   转换amr到wav 1ffmpeg -acodec libamr_nb -i xxx1.amr xxx2.wav  转换mp3到wav 1ffmpeg -i xxx1.mp3 -f wav xxx2.wav  转换wav到amr 1ffmpeg -i xx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="正见">
-<meta property="og:url" content="https://congtong.github.io/2013/12/02/my-first-blog/index.html">
+<meta property="og:title" content="ffmpeg">
+<meta property="og:url" content="https://congtong.github.io/2020/04/07/ffmpeg/index.html">
 <meta property="og:site_name">
-<meta property="og:description" content="讲述佛陀的证悟，真正的佛学里没有神。">
+<meta property="og:description" content="前言ffmpeg 是一款处理视频音频的工具 命令行总结 转换amr到mp3：  1ffmpeg -i xxx1.amr xxxx2.mp3   转换amr到wav 1ffmpeg -acodec libamr_nb -i xxx1.amr xxx2.wav  转换mp3到wav 1ffmpeg -i xxx1.mp3 -f wav xxx2.wav  转换wav到amr 1ffmpeg -i xx">
 <meta property="og:locale" content="cn">
-<meta property="article:published_time" content="2013-12-02T07:30:16.000Z">
-<meta property="article:modified_time" content="2020-03-21T06:26:54.734Z">
+<meta property="article:published_time" content="2020-04-07T02:35:27.000Z">
+<meta property="article:modified_time" content="2020-04-07T02:43:50.531Z">
 <meta property="article:author" content="tongcong">
-<meta property="article:tag" content="读书感悟">
+<meta property="article:tag" content="视频诊断">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="" type="application/atom+xml">
@@ -145,32 +145,67 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-my-first-blog" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-ffmpeg" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      正见
+      ffmpeg
     </h1>
   
 
         
-        <a href="/2013/12/02/my-first-blog/" class="archive-article-date">
-  	<time datetime="2013-12-02T07:30:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2013-12-02</time>
+        <a href="/2020/04/07/ffmpeg/" class="archive-article-date">
+  	<time datetime="2020-04-07T02:35:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="书中讲述了哪些内容"><a href="#书中讲述了哪些内容" class="headerlink" title="书中讲述了哪些内容"></a>书中讲述了哪些内容</h2><ol>
-<li>造作与无常</li>
-<li>情绪与痛苦</li>
-<li>一切是空</li>
-<li>涅槃超越概念</li>
-</ol>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>ffmpeg 是一款处理视频音频的工具</p>
+<h3 id="命令行总结"><a href="#命令行总结" class="headerlink" title="命令行总结"></a>命令行总结</h3><ul>
+<li>转换amr到mp3：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i xxx1.amr xxxx2.mp3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>转换amr到wav</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -acodec libamr_nb -i xxx1.amr xxx2.wav</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转换mp3到wav</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i xxx1.mp3 -f wav xxx2.wav</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转换wav到amr</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i xxx1.wav -acodec libamr_nb -ab 12.2k -ar 8000 -ac 1 xxx2.amr</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转换wav到mp3</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i xxx1.wav -f mp3 -acodec libmp3lame -y xxx2.mp3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转换wmv到mp4</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg <span class="literal">-i</span> xxx1.wmv <span class="literal">-vcodec</span> libx264 <span class="literal">-acodec</span> aac xxx2.mp4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>抓取H264视频流</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i xxx1.flv -vcodec copy -vbsf h264_mp4toannexb -an xxx2.h264</span><br></pre></td></tr></table></figure>
+
+<p>vbsf为过滤方法，即将flv规定的H264组织方式转换回H264协议书规定的字节流格式</p>
+<p>-an 禁掉源文件中的音频，因为出来的码流不需要音频</p>
+<p>vcodec copy这个是必然的</p>
+<ul>
+<li><p>将H264视频流转为mp4</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i xxx1.h264 -f mp4 xxx2.mp4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接收rtsp并存为视频文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -rtsp_transport tcp -i rtsp://streaming1.osu.edu/media2/ufsap/ufsap.mov -vcodec copy -acodec copy -t 30 -f mp4 xxx2.mp4</span><br></pre></td></tr></table></figure>
+
+<p>-rtsp_transport tcp:指明传输方式是tcp方式(也可以是udp)</p>
+<p>-t 30：指明我录制30秒</p>
+</li>
+</ul>
 
       
 
@@ -184,24 +219,13 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">读书感悟</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">视频诊断</a>
         		</li>
       		
 		</ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/读书感悟//" class="article-tag-list-link color5">读书感悟</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
 
       
 
@@ -251,7 +275,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://congtong.github.io/2013/12/02/my-first-blog/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://congtong.github.io/2020/04/07/ffmpeg/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -265,15 +289,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/04/spring-boot/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/04/07/linux%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          spring-boot
+          linux命令总结
         
       </div>
     </a>
   
+  
+    <a href="/2020/04/05/linux%E7%A3%81%E7%9B%98%E8%BF%BD%E5%8A%A0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">linux磁盘追加</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -298,7 +327,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#书中讲述了哪些内容"><span class="toc-number">1.</span> <span class="toc-text">书中讲述了哪些内容</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行总结"><span class="toc-number">2.</span> <span class="toc-text">命令行总结</span></a></li></ol>
                     </div>
                 </span>
             </div>
